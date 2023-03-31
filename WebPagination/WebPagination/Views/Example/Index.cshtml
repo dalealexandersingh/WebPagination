@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Example Page";
+}
+
+<link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="~/css/datatablehelper.css" rel="stylesheet" />
+
+<div class="text-center">
+    
+    <h1 class="display-4">People</h1>
+
+    <table id="PeopleTable">
+        <thead>
+            <tr>
+                <th>Person Id</th>
+                <th>Name</th>
+                <th>Date Of Birth</th>
+                <th>Age</th>
+                <th>City</th>
+                <th>Savings</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+        crossorigin="anonymous"></script>
+
+<script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="~/js/datatablehelper.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        PopulatePeople();
+    });
+
+    function PopulatePeople() {
+        var opt = {};
+
+        opt.pageLength = 5;
+
+        opt.columns = [
+            { data: 'personid', searchType: "text" },
+            { data: 'name', searchType: "text" },
+            { data: 'dob', searchType: "text", dataType: "date" },
+            { data: 'age', searchType: "text" },
+            { data: 'city', searchType: "dropdown" },
+            { data: 'savings', searchType: "text", dataType: "currency" },
+        ]
+
+        $("#PeopleTable").Table(opt, '@Url.Action("GetPeople", "Example")');
+    }
+
+</script>
