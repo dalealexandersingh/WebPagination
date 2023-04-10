@@ -238,7 +238,6 @@ function AddGridSearchOptions(elementName, options, url) {
             cache: false,
             type: "POST",
             data: function (d) {
-                console.log('d', d);
                 if (colValues != null && d.columns != null) {
                     for (c = 0; c < d.columns.length; c++) {
                         var colValue = colValues[c];

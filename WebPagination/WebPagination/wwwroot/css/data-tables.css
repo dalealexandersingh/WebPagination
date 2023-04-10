@@ -1,0 +1,96 @@
+.data-table {
+    width: 100%;
+}
+
+    .data-table > thead > tr > th {
+        border-radius: 3px;
+        padding: 5px;
+        text-align: center;
+        color: white;
+        background-color: #b7b7b7;
+    }
+
+    .data-table > tbody > tr > td {
+        border-radius: 3px;
+        padding: 5px;
+        text-align: left;
+        background-color: #f6f6f6;
+    }
+
+.data-table-search > th {
+    background-color: white !important;
+}
+
+    .data-table-search > th > input[type=text] {
+        float: right;
+        padding: 5px;
+        border-radius: 3px;
+        border: 1px solid #9e9e9e;
+    }
+
+.data-table-description {
+    float: left;
+}
+
+.data-table-nav {
+    float: right;
+}
+
+    .data-table-nav > div {
+        display: inline-block;
+        padding: 5px;
+        margin-left: 2px;
+        border-radius: 3px;
+        background-color: #b7b7b7;
+        color: white;
+    }
+
+
+.data-table-item-number, .data-table-item-currency {
+    text-align: right !important;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.data-table-item-date {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.data-table-item-date, .data-table-item-select {
+    text-align: center !important;
+}
+
+@media only screen and (max-width: 768px) {
+
+    .data-table-description {
+        font-size: 4vw;
+    }
+
+    .data-table > thead > tr > th {
+        padding: 3vw;
+        font-size: 4vw;
+    }
+
+    .data-table > tbody > tr > td {
+        padding: 3vw;
+        font-size: 4vw;
+    }
+
+
+    .data-table-search > th > input[type=text] {
+        padding: 3vw;
+        font-size: 4vw;
+    }
+
+    .data-table-nav > div {
+        padding: 3vw;
+        font-size: 4vw;
+    }
+
+    .data-table-item-select > input[type=checkbox] {
+        width: 4vw;
+        height: 4vw;
+    }
+
+}

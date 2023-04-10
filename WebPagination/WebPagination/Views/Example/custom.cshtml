@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Example Page";
+}
+
+<link href="~/css/data-tables.css" rel="stylesheet" />
+
+<div class="text-center">
+    
+    <h1 class="display-4">Custom Data Table Implementation</h1>
+
+    <a href="/Index">JQuery Implementation</a>
+
+    <br />
+
+    <input type="button" value="Get Selected Ids" onclick="alert(window.peopleDataTable.getSelectedItems())" />
+
+    <table id="PeopleTable">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Person Id</th>
+                <th>Name</th>
+                <th>Date Of Birth</th>
+                <th>Age</th>
+                <th>City</th>
+                <th>Savings</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+<script src="~/js/data-tables.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        PopulatePeople();
+    });
+
+    function PopulatePeople() {
+
+        var opt = {};
+
+        opt.pageLength = 5;
+
+        opt.columns = [
+            { data: 'personid', dataType: "select" },
+            { data: 'personid', dataType: "number" },
+            { data: 'name' },
+            { data: 'dob', dataType: "date" },
+            { data: 'age', dataType: "number" },
+            { data: 'city' },
+            { data: 'savings', dataType: "currency" },
+            { data: 'name', render: function (data, type, row) 
+                {
+                    var city = row["city"];
+                    var age = row["age"];
+                    var sentence = data + ' lives in ' + city + ' and is ' + age + " years old";
+                    return '<input type="button" value="' + data + '" onclick="alert(\'' + sentence + '\')" />';
+                }
+            }
+        ]
+
+        window.peopleDataTable = DataTable("PeopleTable", opt, '@Url.Action("GetPeopleFromBody", "Example")');
+    }
+
+</script>

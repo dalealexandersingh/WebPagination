@@ -7,7 +7,7 @@
         public int Length { get; set; }
         public List<Column> Columns { get; set; }
         public Search Search { get; set; }
-        public int SearchString { get; set; }
+        public string SearchString { get; set; }
         public List<Order> Order { get; set; }
     }
 

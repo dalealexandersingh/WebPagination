@@ -14,6 +14,13 @@ namespace WebPagination.Controllers
             return View();
         }
 
+        [Route("Custom")]
+        public IActionResult Custom()
+        {
+            InitialiseData();
+            return View();
+        }
+
         private ExampleBaseDbContext DbContextFactory() {
             return new ExampleMSSQLDbContext();
         }
@@ -40,6 +47,13 @@ namespace WebPagination.Controllers
 
                 return query.GetPagedList(model);
             }
+        }
+
+        [HttpPost]
+        [Route("GetPeopleFromBody")]
+        public IActionResult GetPeopleFromBody([FromBody] TableSearchModel model)
+        {
+            return GetPeople(model);
         }
 
 
