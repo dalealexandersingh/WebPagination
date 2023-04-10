@@ -21,13 +21,13 @@ function DataTable(name, options, url) {
 
     for (let c = 0; c < tableSearchModel.columns.length; c++) {
         let col = tableSearchModel.columns[c];
-        if (!col.searchable) {
+        if (col.searchable == null) {
             col.searchable = true;
         }
-        if (!col.orderable) {
+        if (col.orderable == null) {
             col.orderable = true;
         }
-        if (!col.search) {
+        if (col.search == null) {
             col.search = {};
         }
     }
@@ -50,6 +50,8 @@ function DataTable(name, options, url) {
     var thead = table.getElementsByTagName('thead')[0].children[1];
 
     thead.addEventListener("click", function (e) {
+        var col = datatable.model.columns[e.srcElement.cellIndex];
+        if (col.orderable != null && col.orderable == false) { return; }
         ReLoadTableSort(name, e.srcElement.cellIndex);
     }, false);
 
@@ -175,7 +177,7 @@ function RenderColValue(datatable, column, item) {
         if (datatable.containsSelectedItem(item[column.data])) {
             selected = ' checked="checked" ';
         }
-        colstring += '<input type="checkbox"' + selected + ' onchange="SetSelected(\'' + datatable.name + '\', \'' + item[column.data] + '\', this.checked )"/>';
+        colstring += '<input type="checkbox"' + selected + ' onchange="setSelected(\'' + datatable.name + '\', \'' + item[column.data] + '\', this.checked )"/>';
 
     } else if (column.dataType == "date") {
 
@@ -204,12 +206,25 @@ function RenderColValue(datatable, column, item) {
     return colstring;
 }
 
-function SetSelected(name, value, checked) {
+function setSelected(name, value, checked) {
     var dt = GetDataTable(name);
     if (checked == true) {
         dt.addSelectedItem(value);
     } else {
         dt.removeSelectedItem(value);
+    }
+}
+
+function selectAll(event) {
+    event.stopPropagation();
+    let checkbox = event.srcElement;
+    let index = checkbox.parentElement.cellIndex;
+    var table = checkbox.parentElement.parentElement.parentElement.parentElement;
+    var body = table.getElementsByTagName('tbody')[0];
+    for (var r = 0; r < body.children.length; r++) {
+        let check = body.children[r].children[index].children[0];
+        check.checked = checkbox.checked;
+        check.dispatchEvent(new Event("change"));
     }
 }
 

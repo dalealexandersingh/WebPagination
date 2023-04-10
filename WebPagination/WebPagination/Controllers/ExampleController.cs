@@ -21,6 +21,13 @@ namespace WebPagination.Controllers
             return View();
         }
 
+        [Route("JQuery")]
+        public IActionResult JQuery()
+        {
+            InitialiseData();
+            return View();
+        }
+
         private ExampleBaseDbContext DbContextFactory() {
             return new ExampleMSSQLDbContext();
         }

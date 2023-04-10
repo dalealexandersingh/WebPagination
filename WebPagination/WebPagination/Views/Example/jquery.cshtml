@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Example Page";
+}
+
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<div class="text-center">
+
+    <a href="/Custom">Custom Implementation</a>
+    <br />
+    <a href="/">JQuery Implementation</a>
+    <br />
+    <a href="/jquery">JQuery Plain Implementation</a>
+    <br />
+
+    <h1 class="display-4">JQuery Data Table Implementation</h1>
+
+    <br />
+
+    <input type="button" value="Get Selected Ids" onclick="alert(window.selectedItems)" />
+
+    <br />
+
+    <table id="PeopleTable">
+        <thead>
+            <tr>
+                <th><input type="checkbox" onclick="selectAll(event);" /></th>
+                <th>Person Id</th>
+                <th>Name</th>
+                <th>Date Of Birth</th>
+                <th>Age</th>
+                <th>City</th>
+                <th>Savings</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8="
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        PopulatePeople();
+    });
+
+    function PopulatePeople() {
+
+        window.selectedItems = [];
+        var options = {};
+
+        options.ajax = {
+            url: '@Url.Action("GetPeople", "Example")',
+            cache: false,
+            type: "POST"
+        };
+
+        options.pageLength = 5;
+        options.dom = 'ftipr';
+        options.processing = true;
+        options.serverSide = true;
+        options.responsive = true;
+        options.searching = true;
+        options.paging = true;
+        options.select = true;
+
+        options.columns = [
+            {
+                data: 'personid', 
+                orderable: false,
+                render: function (data, type, row) {
+                    let selected = '';
+                    if (containsSelectedItem(data)) {
+                        selected = ' checked="checked" ';
+                    }
+                    return '<input type="checkbox"' + selected + ' onchange="setSelected(\'' + data + '\', this.checked )"/>';
+                }
+            },
+            { data: 'personid' },
+            { data: 'name' },
+            { data: 'dob' },
+            { data: 'age' },
+            { data: 'city' },
+            { data: 'savings' },
+            {
+                data: 'name', render: function (data, type, row) {
+                    var city = row["city"];
+                    var age = row["age"];
+                    var sentence = data + ' lives in ' + city + ' and is ' + age + " years old";
+                    return '<input type="button" value="' + data + '" onclick="alert(\'' + sentence + '\')" />';
+                }
+            }
+        ]
+
+        $('#PeopleTable').DataTable(options);
+
+    };
+
+    function containsSelectedItem(id) {
+        for (let s = 0; s < window.selectedItems.length; s++) {
+            if (window.selectedItems[s] == id) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    function removeSelectedItem(id) {
+        const index = window.selectedItems.indexOf(id);
+        if (index > -1) {
+            window.selectedItems.splice(index, 1);
+        }
+    };
+
+    function addSelectedItem(id) {
+        const index = window.selectedItems.indexOf(id);
+        if (index == -1) {
+            window.selectedItems.push(id);
+        }
+    };
+
+    function setSelected(value, checked) {
+        if (checked == true) {
+            addSelectedItem(value);
+        } else {
+            removeSelectedItem(value);
+        }
+    }
+
+    function selectAll(event) {
+        let checkbox = event.srcElement;
+        let index = checkbox.parentElement.cellIndex;
+        var table = checkbox.parentElement.parentElement.parentElement.parentElement;
+        var body = table.getElementsByTagName('tbody')[0];
+        for(var r = 0; r < body.children.length; r++) {
+            let check = body.children[r].children[index].children[0];
+            check.checked = checkbox.checked;
+            check.dispatchEvent(new Event("change"));
+        }
+    }
+
+</script>

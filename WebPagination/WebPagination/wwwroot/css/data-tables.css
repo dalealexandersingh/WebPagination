@@ -88,7 +88,7 @@
         font-size: 4vw;
     }
 
-    .data-table-item-select > input[type=checkbox] {
+    .data-table input[type=checkbox] {
         width: 4vw;
         height: 4vw;
     }

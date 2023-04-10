@@ -5,10 +5,15 @@
 <link href="~/css/data-tables.css" rel="stylesheet" />
 
 <div class="text-center">
-    
-    <h1 class="display-4">Custom Data Table Implementation</h1>
 
-    <a href="/Index">JQuery Implementation</a>
+    <a href="/Custom">Custom Implementation</a>
+    <br />
+    <a href="/">JQuery Implementation</a>
+    <br />
+    <a href="/jquery">JQuery Plain Implementation</a>
+    <br />
+
+    <h1 class="display-4">Custom Data Table Implementation</h1>
 
     <br />
 
@@ -17,7 +22,7 @@
     <table id="PeopleTable">
         <thead>
             <tr>
-                <th>Select</th>
+                <th><input type="checkbox" onclick="selectAll(event);" /></th>
                 <th>Person Id</th>
                 <th>Name</th>
                 <th>Date Of Birth</th>
@@ -47,7 +52,7 @@
         opt.pageLength = 5;
 
         opt.columns = [
-            { data: 'personid', dataType: "select" },
+            { data: 'personid', dataType: "select", orderable: false },
             { data: 'personid', dataType: "number" },
             { data: 'name' },
             { data: 'dob', dataType: "date" },
