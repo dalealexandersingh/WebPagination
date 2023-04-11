@@ -4,6 +4,15 @@
 
 <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet" />
+<style>
+    .center {
+        text-align: center;
+    }
+
+    .right {
+        text-align: right;
+    }
+</style>
 
 <div class="text-center">
 
@@ -28,11 +37,11 @@
                 <th><input type="checkbox" onclick="selectAll(event);" /></th>
                 <th>Person Id</th>
                 <th>Name</th>
-                <th>Date Of Birth</th>
+                <th class="center">Date Of Birth</th>
                 <th>Age</th>
                 <th>City</th>
-                <th>Savings</th>
-                <th>Actions</th>
+                <th class="right">Savings</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -88,12 +97,25 @@
             },
             { data: 'personid' },
             { data: 'name' },
-            { data: 'dob' },
+            {
+                data: 'dob', 
+                className: 'center',
+                render: function (data, type, row) {
+                    return formatDate(data);
+                }
+            },
             { data: 'age' },
             { data: 'city' },
-            { data: 'savings' },
             {
-                data: 'name', render: function (data, type, row) {
+                data: 'savings', 
+                className: 'right',
+                render: function (data, type, row) {
+                    return formatFloat(data, ' ');
+                }
+            },
+            {
+                data: 'name', 
+                render: function (data, type, row) {
                     var city = row["city"];
                     var age = row["age"];
                     var sentence = data + ' lives in ' + city + ' and is ' + age + " years old";
@@ -147,6 +169,39 @@
             check.checked = checkbox.checked;
             check.dispatchEvent(new Event("change"));
         }
+    }
+
+    function formatDate(date) {
+
+        var dt = new Date(date);
+
+        var mnth = (dt.getMonth() + 1).toString();
+        if (mnth.length == 1) { mnth = "0" + mnth; }
+
+        var day = dt.getDate().toString();
+        if (day.length == 1) { day = "0" + day; }
+
+        return dt.getFullYear() + "-" + mnth + "-" + day;
+    }
+
+    function formatFloat(f, thousandsChar) {
+
+        if (thousandsChar == null) { thousandsChar = ' '; }
+
+        var st = parseFloat(f).toFixed(2).toString().trim().replace(' ', '');
+        var rtn = st.substring(st.length - 3, st.length);
+        st = st.replace(rtn, '');
+        while (st.length > 0) {
+            if (st.length >= 3) {
+                rtn = st.substring(st.length - 3, st.length) + thousandsChar + rtn;
+                st = st.substring(0, st.length - 3);
+            } else {
+                rtn = st + thousandsChar + rtn;
+                st = '';
+            }
+        }
+
+        return rtn.replace('- ', '-').replace(' .', '.');
     }
 
 </script>
