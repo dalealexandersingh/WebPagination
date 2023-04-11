@@ -6,11 +6,11 @@
 <link href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" rel="stylesheet" />
 <style>
     .center {
-        text-align: center;
+        text-align: center !important;
     }
 
     .right {
-        text-align: right;
+        text-align: right !important;
     }
 </style>
 
@@ -27,7 +27,7 @@
 
     <br />
 
-    <input type="button" value="Get Selected Ids" onclick="alert(window.selectedItems)" />
+    <input type="button" value="Get Selected Ids" onclick="alert(window.peopleTable.selectedItems);" />
 
     <br />
 
@@ -57,6 +57,8 @@
 
 <script type="text/javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
+<script src="~/js/data-tables-helper.js"></script>
+
 <script>
 
     $(document).ready(function () {
@@ -65,23 +67,7 @@
 
     function PopulatePeople() {
 
-        window.selectedItems = [];
-        var options = {};
-
-        options.ajax = {
-            url: '@Url.Action("GetPeople", "Example")',
-            cache: false,
-            type: "POST"
-        };
-
-        options.pageLength = 5;
-        options.dom = 'ftipr';
-        options.processing = true;
-        options.serverSide = true;
-        options.responsive = true;
-        options.searching = true;
-        options.paging = true;
-        options.select = true;
+        var options = getDataTableDefaultOptions('@Url.Action("GetPeople", "Example")');
 
         options.columns = [
             {
@@ -89,10 +75,10 @@
                 orderable: false,
                 render: function (data, type, row) {
                     let selected = '';
-                    if (containsSelectedItem(data)) {
+                    if (window.peopleTable.containsSelectedItem(data)) {
                         selected = ' checked="checked" ';
                     }
-                    return '<input type="checkbox"' + selected + ' onchange="setSelected(\'' + data + '\', this.checked )"/>';
+                    return '<input type="checkbox"' + selected + ' onchange="window.peopleTable.setSelected(\'' + data + '\', this.checked )"/>';
                 }
             },
             { data: 'personid' },
@@ -124,84 +110,10 @@
             }
         ]
 
-        $('#PeopleTable').DataTable(options);
+        window.peopleTable = $('#PeopleTable').Table(options);
 
     };
 
-    function containsSelectedItem(id) {
-        for (let s = 0; s < window.selectedItems.length; s++) {
-            if (window.selectedItems[s] == id) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    function removeSelectedItem(id) {
-        const index = window.selectedItems.indexOf(id);
-        if (index > -1) {
-            window.selectedItems.splice(index, 1);
-        }
-    };
-
-    function addSelectedItem(id) {
-        const index = window.selectedItems.indexOf(id);
-        if (index == -1) {
-            window.selectedItems.push(id);
-        }
-    };
-
-    function setSelected(value, checked) {
-        if (checked == true) {
-            addSelectedItem(value);
-        } else {
-            removeSelectedItem(value);
-        }
-    }
-
-    function selectAll(event) {
-        let checkbox = event.srcElement;
-        let index = checkbox.parentElement.cellIndex;
-        var table = checkbox.parentElement.parentElement.parentElement.parentElement;
-        var body = table.getElementsByTagName('tbody')[0];
-        for(var r = 0; r < body.children.length; r++) {
-            let check = body.children[r].children[index].children[0];
-            check.checked = checkbox.checked;
-            check.dispatchEvent(new Event("change"));
-        }
-    }
-
-    function formatDate(date) {
-
-        var dt = new Date(date);
-
-        var mnth = (dt.getMonth() + 1).toString();
-        if (mnth.length == 1) { mnth = "0" + mnth; }
-
-        var day = dt.getDate().toString();
-        if (day.length == 1) { day = "0" + day; }
-
-        return dt.getFullYear() + "-" + mnth + "-" + day;
-    }
-
-    function formatFloat(f, thousandsChar) {
-
-        if (thousandsChar == null) { thousandsChar = ' '; }
-
-        var st = parseFloat(f).toFixed(2).toString().trim().replace(' ', '');
-        var rtn = st.substring(st.length - 3, st.length);
-        st = st.replace(rtn, '');
-        while (st.length > 0) {
-            if (st.length >= 3) {
-                rtn = st.substring(st.length - 3, st.length) + thousandsChar + rtn;
-                st = st.substring(0, st.length - 3);
-            } else {
-                rtn = st + thousandsChar + rtn;
-                st = '';
-            }
-        }
-
-        return rtn.replace('- ', '-').replace(' .', '.');
-    }
+    
 
 </script>

@@ -7,10 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\data-tables-helper.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="SQL\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\data-tables-helper.js" />
     <None Include="wwwroot\js\data-tables.js" />
   </ItemGroup>
 
